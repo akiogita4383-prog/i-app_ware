@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- shadow/body -->
+  <path d="M22 30 L10 44 L18 52 L24 42 L24 88 L76 88 L76 42 L82 52 L90 44 L78 30 L64 24 L58 18 L42 18 L36 24 Z"
+        fill="#fafaf8" stroke="#dddad4" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- collar -->
+  <path d="M42 18 L50 28 L58 18" stroke="#ccc9c2" stroke-width="1.5" stroke-linejoin="round" fill="#f5f4f0"/>
+  <!-- center placket -->
+  <line x1="50" y1="30" x2="50" y2="85" stroke="#e4e1da" stroke-width="0.8"/>
+  <!-- buttons -->
+  <circle cx="50" cy="40" r="2" fill="#e0ddd6"/>
+  <circle cx="50" cy="52" r="2" fill="#e0ddd6"/>
+  <circle cx="50" cy="64" r="2" fill="#e0ddd6"/>
+  <!-- sleeve creases -->
+  <path d="M24 42 Q20 52 18 60" stroke="#e4e1da" stroke-width="0.8" stroke-linecap="round"/>
+  <path d="M76 42 Q80 52 82 60" stroke="#e4e1da" stroke-width="0.8" stroke-linecap="round"/>
+</svg>

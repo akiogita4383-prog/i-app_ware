@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 500" fill="none">
+  <rect width="300" height="500" fill="#fdf8f5"/>
+  <!-- hair -->
+  <ellipse cx="150" cy="72" rx="42" ry="50" fill="#c9956a"/>
+  <path d="M108 72 C105 110 108 140 112 160 L118 155 C115 135 112 105 115 72 Z" fill="#b8845a"/>
+  <path d="M192 72 C195 110 192 140 188 160 L182 155 C185 135 188 105 185 72 Z" fill="#b8845a"/>
+  <!-- face -->
+  <ellipse cx="150" cy="85" rx="34" ry="36" fill="#fde8da"/>
+  <!-- eyes -->
+  <ellipse cx="138" cy="83" rx="5" ry="5.5" fill="#5a3d28"/>
+  <ellipse cx="162" cy="83" rx="5" ry="5.5" fill="#5a3d28"/>
+  <ellipse cx="139" cy="82" rx="2" ry="2.5" fill="white" opacity="0.6"/>
+  <ellipse cx="163" cy="82" rx="2" ry="2.5" fill="white" opacity="0.6"/>
+  <!-- lashes -->
+  <path d="M133 79 Q138 76 143 79" stroke="#3a2818" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+  <path d="M157 79 Q162 76 167 79" stroke="#3a2818" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+  <!-- nose -->
+  <path d="M147 94 Q150 97 153 94" stroke="#d4a090" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- mouth -->
+  <path d="M143 101 Q150 107 157 101" stroke="#e08080" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- blush -->
+  <ellipse cx="130" cy="95" rx="10" ry="5" fill="#f9c0b0" opacity="0.35"/>
+  <ellipse cx="170" cy="95" rx="10" ry="5" fill="#f9c0b0" opacity="0.35"/>
+  <!-- neck -->
+  <rect x="142" y="118" width="16" height="20" fill="#fde8da" rx="4"/>
+  <!-- camisole body -->
+  <path d="M112 138 L138 128 L150 134 L162 128 L188 138 L194 280 L106 280 Z" fill="#f8f4f2" stroke="#e8e2de" stroke-width="1.2"/>
+  <!-- camisole straps -->
+  <path d="M138 128 L136 118 L132 115" stroke="#e0dbd6" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M162 128 L164 118 L168 115" stroke="#e0dbd6" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- sweetheart neckline -->
+  <path d="M136 133 Q143 143 150 140 Q157 143 164 133" fill="#f0ebe8" stroke="#e0dbd6" stroke-width="1"/>
+  <!-- shorts -->
+  <path d="M110 278 L106 340 L148 340 L150 310 L152 340 L194 340 L190 278 Z" fill="#f5f0ed" stroke="#e8e2de" stroke-width="1.2"/>
+  <!-- legs -->
+  <rect x="115" y="338" width="28" height="110" fill="#fde8da" rx="10"/>
+  <rect x="157" y="338" width="28" height="110" fill="#fde8da" rx="10"/>
+  <!-- feet -->
+  <ellipse cx="129" cy="450" rx="18" ry="8" fill="#fdddd0"/>
+  <ellipse cx="171" cy="450" rx="18" ry="8" fill="#fdddd0"/>
+  <!-- arms -->
+  <path d="M112 150 Q96 190 100 240" stroke="#fde8da" stroke-width="18" stroke-linecap="round" fill="none"/>
+  <path d="M188 150 Q204 190 200 240" stroke="#fde8da" stroke-width="18" stroke-linecap="round" fill="none"/>
+  <!-- hands -->
+  <ellipse cx="100" cy="244" rx="12" ry="10" fill="#fde8da"/>
+  <ellipse cx="200" cy="244" rx="12" ry="10" fill="#fde8da"/>
+  <!-- earrings -->
+  <circle cx="116" cy="98" r="3" fill="white" stroke="#d4c8c0" stroke-width="0.8"/>
+  <circle cx="184" cy="98" r="3" fill="white" stroke="#d4c8c0" stroke-width="0.8"/>
+</svg>

@@ -1,0 +1,8 @@
+# Supabase CLI 用の最小設定。本番の設定（Apple サインイン・匿名サインイン）はダッシュボードで行う
+project_id = "ware"
+
+[functions.analyze-item]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true

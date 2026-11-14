@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- chain arc -->
+  <path d="M18 28 Q50 58 82 28" stroke="#d4b830" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <!-- chain links hint -->
+  <path d="M18 28 Q50 58 82 28" stroke="#e8d060" stroke-width="0.6" stroke-linecap="round" stroke-dasharray="4,3" fill="none"/>
+  <!-- pendant stem -->
+  <line x1="50" y1="56" x2="50" y2="64" stroke="#d4b830" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- heart pendant -->
+  <path d="M42 66 Q42 61 47 61 Q50 61 50 65 Q50 61 53 61 Q58 61 58 66 Q58 71 50 77 Q42 71 42 66 Z"
+        fill="#f4c0c8" stroke="#d4b830" stroke-width="1.2"/>
+  <!-- heart highlight -->
+  <path d="M44 64 Q46 62 48 63" stroke="white" stroke-width="0.8" stroke-linecap="round" opacity="0.7"/>
+  <!-- clasp at top -->
+  <rect x="46" y="24" width="8" height="5" rx="2" fill="#c8a820" stroke="#b89818" stroke-width="0.8"/>
+</svg>

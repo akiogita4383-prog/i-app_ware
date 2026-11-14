@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- handle -->
+  <path d="M35 28 Q35 14 50 14 Q65 14 65 28" stroke="#c0a882" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <!-- bag body -->
+  <rect x="14" y="28" width="72" height="58" rx="6" fill="#ede0cc" stroke="#c0a882" stroke-width="1.5"/>
+  <!-- bag top flap shadow -->
+  <path d="M14 28 L86 28 L86 42 Q50 48 14 42 Z" fill="#e0d0b8" opacity="0.5"/>
+  <!-- clasp -->
+  <rect x="42" y="38" width="16" height="10" rx="3" fill="#c8a870" stroke="#b89858" stroke-width="1"/>
+  <circle cx="50" cy="43" r="3" fill="#b89858"/>
+  <!-- pocket stitch lines -->
+  <rect x="20" y="52" width="60" height="28" rx="4" stroke="#c0a882" stroke-width="0.8" stroke-dasharray="3,2"/>
+  <!-- bottom shadow -->
+  <path d="M14 80 Q50 86 86 80 L86 86 Q50 92 14 86 Z" fill="#c0a882" opacity="0.2"/>
+</svg>

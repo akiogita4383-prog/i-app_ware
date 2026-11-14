@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- shoe upper / toe box -->
+  <path d="M16 58 Q18 38 42 34 Q70 30 82 40 L82 56 Q60 52 40 60 Z"
+        fill="#f0ddd2" stroke="#d4b8a8" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- vamp / instep -->
+  <path d="M42 34 Q36 30 30 32 Q20 36 16 58 Q30 55 42 56 Z"
+        fill="#e8d0c4" stroke="#d4b8a8" stroke-width="1"/>
+  <!-- sole -->
+  <path d="M16 58 Q14 66 18 68 L78 68 Q84 68 82 56 Q60 52 40 60 Q28 64 16 58 Z"
+        fill="#e0c8b8" stroke="#c0a898" stroke-width="1.2"/>
+  <!-- heel -->
+  <rect x="72" y="56" width="12" height="24" rx="3" fill="#e0c8b8" stroke="#c0a898" stroke-width="1.2"/>
+  <rect x="74" y="78" width="8" height="4" rx="2" fill="#c0a898"/>
+  <!-- highlight -->
+  <path d="M42 36 Q55 33 70 36" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+</svg>
