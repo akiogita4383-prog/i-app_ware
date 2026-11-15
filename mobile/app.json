@@ -44,9 +44,21 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "expo-sharing",
+      [
+        "expo-sharing",
+        {
+          "ios": {
+            "enabled": true,
+            "activationRule": {
+              "supportsImageWithMaxCount": 5
+            }
+          }
+        }
+      ],
       "expo-asset",
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-document-picker",
+      "./plugins/withShareExtensionName"
     ],
     "experiments": {
       "typedRoutes": false

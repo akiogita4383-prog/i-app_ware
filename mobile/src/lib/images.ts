@@ -41,6 +41,14 @@ export type PreparedImage = {
  * 撮影/選択した画像を長辺1024pxに縮小し、AI に送れる base64 も作る。
  * 背景除去済み（透過）なら PNG、そうでなければ容量の小さい JPEG。
  */
+/** ファイルアプリや共有から受け取った画像のように、サイズが分からない画像を読み込んでサイズを得る */
+export async function readImageSource(uri: string): Promise<ImageSource> {
+  const ref = await ImageManipulator.manipulate(uri).renderAsync();
+  return { uri, width: ref.width, height: ref.height };
+}
+
+export type ImageSource = { uri: string; width: number; height: number };
+
 export async function prepareImage(
   uri: string,
   width: number,

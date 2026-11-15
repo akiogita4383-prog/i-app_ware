@@ -1,10 +1,12 @@
+import * as DocumentPicker from 'expo-document-picker';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
+import { useIncomingShare } from 'expo-sharing';
 import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { liftSubject } from '@modules/subject-lifter';
 import { ItemEditor, emptyItemForm, validateItemForm, type ItemFormErrors, type ItemFormValue } from '@/components/ItemEditor';
@@ -12,10 +14,13 @@ import { Button } from '@/components/ui';
 import { analyzeItemImage } from '@/lib/ai';
 import { useAiAvailable } from '@/lib/auth';
 import { insertItem, newId } from '@/lib/db';
-import { prepareImage, storeItemImage, type PreparedImage } from '@/lib/images';
+import { prepareImage, readImageSource, storeItemImage, type ImageSource, type PreparedImage } from '@/lib/images';
 import { colors, radius } from '@/lib/theme';
 
 const MAX_PHOTOS = 5;
+
+// 共有で受け取った画像を二重に読み込まないための記録（画面が2つ開いても1回だけ）
+const handledShares = new Set<string>();
 
 type Draft = {
   key: string;
@@ -34,11 +39,12 @@ export default function ScanScreen() {
   const aiAvailable = useAiAvailable();
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
+  const { resolvedSharedPayloads, clearSharedPayloads } = useIncomingShare();
 
   const patch = (key: string, p: Partial<Draft>) =>
     setDrafts((ds) => ds.map((d) => (d.key === key ? { ...d, ...p } : d)));
 
-  const processAsset = async (key: string, asset: ImagePicker.ImagePickerAsset) => {
+  const processAsset = async (key: string, asset: ImageSource) => {
     // 1. 背景除去（iOS Vision）。使えない環境では元の写真のまま
     const lifted = await liftSubject(asset.uri);
     const prepared = lifted
@@ -61,8 +67,11 @@ export default function ScanScreen() {
     }
   };
 
-  const addAssets = async (assets: ImagePicker.ImagePickerAsset[]) => {
+  const addAssets = async (assets: ImageSource[]) => {
     const room = MAX_PHOTOS - drafts.length;
+    if (assets.length > room) {
+      Alert.alert('一度に登録できるのは5枚までです', `最初の${Math.max(room, 0)}枚を読み込みます。残りは登録後にもう一度追加してください。`);
+    }
     const picked = assets.slice(0, room).map((a) => ({ asset: a, key: newId() }));
     setDrafts((ds) => [
       ...ds,
@@ -89,6 +98,37 @@ export default function ScanScreen() {
     }
   };
 
+  /** ファイルアプリ・共有など、サイズの分からない画像を読み込んで追加する */
+  const addUris = async (uris: string[]) => {
+    const sources: ImageSource[] = [];
+    let failed = 0;
+    for (const uri of uris) {
+      try {
+        sources.push(await readImageSource(uri));
+      } catch (e) {
+        console.warn('[scan] read failed', e);
+        failed++;
+      }
+    }
+    if (failed) {
+      Alert.alert('読み込めない画像がありました', 'JPEG・PNG・HEIC などの画像ファイルを選んでください。');
+    }
+    if (sources.length) await addAssets(sources);
+  };
+
+  // 写真・ファイル・Google ドライブなどの共有シートから送られてきた画像
+  useEffect(() => {
+    const uris = resolvedSharedPayloads
+      .filter((p) => p.contentUri && (p.contentType === 'image' || p.contentMimeType?.startsWith('image/')))
+      .map((p) => p.contentUri as string)
+      .filter((uri) => !handledShares.has(uri));
+    if (!uris.length) return;
+    uris.forEach((uri) => handledShares.add(uri));
+    // 読み込み（縮小コピー）が終わったら、共有用の一時ファイルを消す
+    Promise.resolve(uris).then(addUris).finally(clearSharedPayloads);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedSharedPayloads]);
+
   const takePhoto = async () => {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
     if (!perm.granted) {
@@ -108,6 +148,17 @@ export default function ScanScreen() {
     });
     if (!res.canceled) await addAssets(res.assets);
   };
+
+  const pickFiles = async () => {
+    const res = await DocumentPicker.getDocumentAsync({
+      type: 'image/*',
+      multiple: true,
+      copyToCacheDirectory: true,
+    });
+    if (!res.canceled) await addUris(res.assets.map((a) => a.uri));
+  };
+
+  const close = () => (router.canGoBack() ? router.back() : router.replace('/closet'));
 
   const busy = drafts.some((d) => d.status !== 'ready');
 
@@ -139,7 +190,7 @@ export default function ScanScreen() {
         });
       }
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      router.back();
+      close();
     } catch (e) {
       Alert.alert('保存できませんでした', (e as Error).message);
     } finally {
@@ -156,6 +207,10 @@ export default function ScanScreen() {
             <Text style={styles.introTitle}>服の写真を撮るか選んでください</Text>
             <Text style={styles.introSub}>
               背景を自動で切り抜き{aiAvailable ? '、AI が種類や色を判定します' : 'ます'}。一度に{MAX_PHOTOS}枚まで。
+            </Text>
+            <Text style={styles.introHint}>
+              「ファイル」では iPhone 内のファイルや iCloud Drive・Google ドライブの画像を選べます。{'\n'}
+              写真アプリやファイルアプリ、Google ドライブの「共有」→「my coordy」からも登録できます。
             </Text>
           </View>
         )}
@@ -209,8 +264,9 @@ export default function ScanScreen() {
 
         {drafts.length < MAX_PHOTOS && (
           <View style={styles.row}>
-            <Button title="カメラで撮る" variant="secondary" style={styles.flex} onPress={takePhoto} disabled={saving} />
-            <Button title="写真から選ぶ" variant="secondary" style={styles.flex} onPress={pickPhotos} disabled={saving} />
+            <Button title="カメラ" variant="secondary" style={styles.flex} onPress={takePhoto} disabled={saving} />
+            <Button title="写真" variant="secondary" style={styles.flex} onPress={pickPhotos} disabled={saving} />
+            <Button title="ファイル" variant="secondary" style={styles.flex} onPress={pickFiles} disabled={saving} />
           </View>
         )}
 
@@ -234,6 +290,7 @@ const styles = StyleSheet.create({
   intro: { alignItems: 'center', gap: 10, paddingVertical: 32 },
   introTitle: { fontSize: 16, fontWeight: '600', color: colors.text },
   introSub: { fontSize: 13, color: colors.textMuted, textAlign: 'center', lineHeight: 19 },
+  introHint: { fontSize: 12, color: colors.textMuted, textAlign: 'center', lineHeight: 18, marginTop: 4 },
   draft: {
     backgroundColor: colors.card,
     borderRadius: radius.lg,
