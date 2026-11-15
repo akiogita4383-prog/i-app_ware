@@ -49,7 +49,7 @@ export default function NewEventScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <Card>
         <Field label="内容" value={title} onChangeText={(v) => { setTitle(v); setError(''); }} placeholder="例：友だちとランチ" />
         <View style={styles.row}>

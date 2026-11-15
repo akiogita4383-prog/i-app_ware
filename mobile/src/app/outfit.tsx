@@ -100,17 +100,17 @@ export default function OutfitScreen() {
 
   if (!aiAvailable) {
     return (
-      <View style={styles.container}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container}>
         <Card>
           <Text style={styles.muted}>AI のコーデ提案を使うには、設定で「AI 機能」をオンにしてください。</Text>
           <Button title="設定を開く" variant="secondary" onPress={() => router.replace('/settings')} />
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container}>
       <Text style={styles.dateLabel}>{jaDate(fromYmd(date))} のコーデ</Text>
 
       {!result ? (

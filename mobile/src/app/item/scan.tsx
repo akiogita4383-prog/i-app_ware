@@ -149,7 +149,7 @@ export default function ScanScreen() {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.flex}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         {drafts.length === 0 && (
           <View style={styles.intro}>
             <SymbolView name="camera.viewfinder" size={56} tintColor={colors.pink} />

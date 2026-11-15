@@ -36,7 +36,7 @@ export default function NewItemScreen() {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.flex}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <ItemEditor value={form} onChange={setForm} errors={errors} />
         <View style={styles.actions}>
           <Button title="キャンセル" variant="secondary" style={styles.flex} onPress={() => router.back()} />

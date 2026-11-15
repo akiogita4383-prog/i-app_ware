@@ -80,7 +80,7 @@ export default function ItemDetailScreen() {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.flex}>
       <Stack.Screen options={{ title: item.name }} />
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         {image && (
           <View style={styles.imageBox}>
             <Image alt={item.name} source={{ uri: image }} style={StyleSheet.absoluteFill} contentFit="contain" />

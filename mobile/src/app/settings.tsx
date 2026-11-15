@@ -68,7 +68,7 @@ export default function SettingsScreen() {
     );
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       {prefs && (
         <Section title="プロフィール（この iPhone 内にだけ保存）">
           <View style={styles.row}>

@@ -49,6 +49,7 @@ export default function ClosetScreen() {
 
   return (
     <FlatList
+      contentInsetAdjustmentBehavior="automatic"
       data={items}
       keyExtractor={(i) => i.id}
       numColumns={2}
