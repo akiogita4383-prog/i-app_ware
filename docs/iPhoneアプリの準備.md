@@ -6,7 +6,7 @@
 |---|---|
 | `mobile/` | iPhone アプリ（Expo SDK 58）。服のデータは端末内の SQLite、写真は端末の Documents フォルダに保存 |
 | `mobile/modules/subject-lifter/` | iOS 標準の Vision で背景を切り抜く自作モジュール（iOS 17 以上） |
-| `supabase/` | サーバー側。AI 呼び出しとアカウント削除の Edge Functions、AI 利用回数のテーブルだけ |
+| `supabase/` | サーバー側。AI 呼び出し（服の解析・コーデ提案・ショッピング検索・イラスト生成）とアカウント削除の Edge Functions、AI 利用回数のテーブルだけ |
 | `src/` ほか | 旧 Web 版（Next.js）。参考用に残しているだけ |
 
 Supabase を設定しなくてもアプリは動きます。その場合、AI 解析とサインインは使えず、服の登録は手入力になります。
@@ -30,6 +30,23 @@ npx supabase link --project-ref <プロジェクトのID>
 npx supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
 npx supabase functions deploy analyze-item
 npx supabase functions deploy delete-account
+npx supabase functions deploy suggest-outfits
+npx supabase functions deploy shopping-search
+npx supabase functions deploy generate-coordinate
+```
+
+### 任意の機能のキー
+
+どちらも、設定しなければその機能だけが控えめな動きになります。キーは自分のターミナルで登録し、チャットやリポジトリには貼らないでください。
+
+| シークレット | 使う機能 | 未設定のとき |
+|---|---|---|
+| `OPENAI_API_KEY` | 着せ替え・ショッピングの「AI でイラスト化」（OpenAI gpt-image-1、1枚あたり数円〜十数円） | 「準備中です」と表示 |
+| `YAHOO_SHOPPING_APP_ID` | ショッピングで実際の商品を表示（Yahoo!デベロッパーネットワークで無料登録した Client ID） | 検索キーワードと「Yahoo!ショッピングで探す」リンクだけ表示 |
+
+```bash
+read -s -p "キーを貼り付けてEnter: " KEY && npx supabase secrets set OPENAI_API_KEY="$KEY" --project-ref <プロジェクトのID>
+read -s -p "Client IDを貼り付けてEnter: " KEY && npx supabase secrets set YAHOO_SHOPPING_APP_ID="$KEY" --project-ref <プロジェクトのID>
 ```
 
 ### Apple のトークン取り消し用のシークレット（App Store 審査に必要）
@@ -139,9 +156,39 @@ npx eas-cli@latest build --profile development --platform ios
 - Bundle ID の `com.akioyamamoto.mycoordy` は仮の値です。変える場合は `mobile/app.json`、上記の Supabase の Client IDs、`APPLE_CLIENT_ID` の3か所を揃えてください。
 - ビルドが失敗したら、expo.dev のビルド画面で赤くなっているステップのログを開いて、内容を共有してください。
 
+## 5. TestFlight で配信する
+
+開発ビルド（4章）は Mac の開発サーバーにつないで動きますが、TestFlight 版は単体で動きます。家族や友だちにも配れます。
+
+### 5-1. 本番用ビルドを作って App Store Connect に送る
+
+```bash
+cd ~/vscode/ware/mobile
+npx eas-cli@latest build --profile production --platform ios --auto-submit
+```
+
+途中の質問：
+
+- Apple アカウントへのログイン → Yes（Apple ID・パスワード・2ファクタ認証のコード）
+- 証明書・プロビジョニングプロファイルの作成 → すべて Yes
+- 「Generate a new App Store Connect API Key?」→ Yes
+- App Store Connect にアプリがまだ無い場合は作成されます。アプリ名を聞かれたら `my coordy` と入れます（他のアプリと同じ名前は使えないので、断られたら `my coordy AIクローゼット` などにします）
+
+ビルドに15〜30分、そのあと Apple 側の処理に10〜30分かかります。終わると Apple からメールが届きます。
+
+### 5-2. 自分の iPhone に入れる
+
+1. https://appstoreconnect.apple.com →「マイ App」→ my coordy →「TestFlight」タブ
+2. 左の「内部テスト」の「＋」でグループを作り（名前は「自分」など）、テスターに自分の Apple ID を追加する
+3. iPhone に App Store から「TestFlight」アプリを入れ、届いた招待から my coordy をインストールする
+
+2回目以降は 5-1 のコマンドを実行するだけで、TestFlight に新しい版が届きます。
+
 ## データの扱い（審査・プライバシー表示用のメモ）
 
 - 服の情報・写真・履歴は端末内にだけ保存し、サーバーには送りません（iCloud バックアップの対象）。
-- AI 解析を使うと、写真が Supabase の Edge Function を経由して Anthropic に送られます。どちらにも保存はしません。初回起動時の同意と、設定画面のスイッチで制御しています。
+- AI 機能を使うと、服の写真・情報、天気や予定の内容が Supabase の Edge Function を経由して Anthropic（解析・提案・検索キーワード）と OpenAI（イラスト生成）に送られます。どこにも保存はしません。初回起動時の同意と、設定画面のスイッチで制御しています。
+- 位置情報は天気の取得にだけ使い、端末から Open-Meteo に送ります（おおよその位置）。サーバーには送りません。
+- 予定・コーデ履歴・誕生日・パーソナルカラー・AI イラスト（Like）も端末内にだけ保存します。
 - サーバーに残るのは、アカウント（匿名または Apple ID）と AI の利用回数だけです。
-- AI 解析の上限は1日あたり、匿名ユーザー30回・Apple ID 連携ユーザー100回です（`supabase/functions/analyze-item/index.ts`）。
+- AI の1日あたりの上限（匿名 / Apple ID 連携）：服の解析 30 / 100回、コーデ提案 20 / 60回、ショッピング検索 20 / 50回、イラスト生成 3 / 10回（各 Edge Function の `consumeQuota`）。

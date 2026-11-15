@@ -25,6 +25,7 @@ export async function consumeQuota(
   user: AppUser,
   fn: string,
   limits: { anonymous: number; signedIn: number },
+  message = '今日の AI 解析の上限に達しました。明日また試すか、手入力で登録してください',
 ): Promise<void> {
   const limit = user.isAnonymous ? limits.anonymous : limits.signedIn;
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -36,7 +37,7 @@ export async function consumeQuota(
     .gte('created_at', since);
   if (error) throw error;
   if ((count ?? 0) >= limit) {
-    throw new HttpError(429, '今日の AI 解析の上限に達しました。明日また試すか、手入力で登録してください');
+    throw new HttpError(429, message);
   }
   const ins = await admin.from('ai_usage').insert({ user_id: user.id, fn });
   if (ins.error) throw ins.error;

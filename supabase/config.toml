@@ -6,3 +6,12 @@ verify_jwt = true
 
 [functions.delete-account]
 verify_jwt = true
+
+[functions.suggest-outfits]
+verify_jwt = true
+
+[functions.shopping-search]
+verify_jwt = true
+
+[functions.generate-coordinate]
+verify_jwt = true

@@ -1,0 +1,10 @@
+{
+  "name": "subject-lifter",
+  "version": "1.0.0",
+  "description": "iOS Vision による被写体の切り抜き（背景除去）",
+  "main": "index.ts",
+  "license": "UNLICENSED",
+  "author": "ware",
+  "homepage": "https://example.com",
+  "private": true
+}
