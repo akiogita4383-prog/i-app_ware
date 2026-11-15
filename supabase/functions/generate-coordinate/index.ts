@@ -1,4 +1,4 @@
-// アバターと服の画像から、コーデを着たイラストを AI（OpenAI gpt-image-1）で生成する。
+// アバターと服の画像から、コーデを着たイラストを AI（OpenAI gpt-image-2.5-flare。gpt-image-1 は 2026/10/23 に提供終了）で生成する。
 // 画像はこの関数のメモリ上で扱うだけで、どこにも保存しない。OPENAI_API_KEY が未設定なら 503。
 import { consumeQuota, requireUser } from '../_shared/auth.ts';
 import { errorResponse, HttpError, json } from '../_shared/http.ts';
@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
       if (blob) form.append('image[]', blob, `item-${i}.${blob.type === 'image/png' ? 'png' : 'jpg'}`);
     }
 
-    form.append('model', 'gpt-image-1');
+    form.append('model', 'gpt-image-2.5-flare');
     form.append('size', '1024x1536');
     form.append('quality', 'medium');
     form.append(

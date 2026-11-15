@@ -41,7 +41,7 @@ npx supabase functions deploy generate-coordinate
 
 | シークレット | 使う機能 | 未設定のとき |
 |---|---|---|
-| `OPENAI_API_KEY` | 着せ替え・ショッピングの「AI でイラスト化」（OpenAI gpt-image-1、1枚あたり数円〜十数円） | 「準備中です」と表示 |
+| `OPENAI_API_KEY` | 着せ替え・ショッピングの「AI でイラスト化」（OpenAI gpt-image-2.5-flare、1枚あたり十円前後） | 「準備中です」と表示 |
 | `YAHOO_SHOPPING_APP_ID` | ショッピングで実際の商品を表示（Yahoo!デベロッパーネットワークで無料登録した Client ID） | 検索キーワードと「Yahoo!ショッピングで探す」リンクだけ表示 |
 
 ```bash
